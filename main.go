@@ -40,20 +40,14 @@ func main() {
 	var flgOutput = flag.String("output", "", "output")
 	flag.Parse()
 
-	if *flgOutput != ""  && !strings.HasSuffix(*flgOutput, ".txt") {
-		fmt.Println("Error: the flag must be a .txt file")
+	if *flgOutput != "" && !strings.HasSuffix(*flgOutput, ".txt") {
+		fmt.Println("Error: the file must be a .txt file")
 		os.Exit(0)
 	}
-
-	//Validate color flag
-	// if !strings.Contains(os.Args[1], "--color=") && flag.NFlag() == 1 {
-	// 	fmt.Println(ErrorText)
+	// if !strings.Contains(os.Args[1], "--output=") && flag.NFlag() == 1 {
+	// 	fmt.Println(outError)
 	// 	os.Exit(0)
 	// }
-	if !strings.Contains(os.Args[1], "--output=") && flag.NFlag() == 1 {
-		fmt.Println(outError)
-		os.Exit(0)
-	}
 	color := a.ColorPicker(*flgColor)
 
 	// Get non-flag arguments
@@ -62,34 +56,33 @@ func main() {
 	nflags := flag.NFlag() // Count of flags
 
 	// Handle arguments based on the number of flags and non-flag arguments
-	if nflags == 0 {
+	if nflags == 1 {
 		switch nArgs {
 		case 1:
 			input = args[0]
 			subString = input
 		case 2:
 			input = args[0]
+			subString = input
 			bannerFile = args[1]
-			subString = input
-		default:
-			fmt.Println(fsError)
-			os.Exit(0)
-		}
-	} else {
-		switch nArgs {
-		case 1:
-			input = args[0]
-			subString = input
-		case 2:
-			subString = args[0]
-			input = args[1]
 		case 3:
 			subString = args[0]
 			input = args[1]
 			bannerFile = args[2]
 		default:
-
 			fmt.Println(ErrorText)
+			os.Exit(0)		
+
+		}
+	}else{
+		switch nArgs {
+		case 1:
+			input = args[0]
+		case 2:
+			input = args[0]	
+			bannerFile = args[1]
+		default:
+			fmt.Println(fsError)
 			os.Exit(0)
 		}
 	}
@@ -112,10 +105,9 @@ func main() {
 		fmt.Println("Error")
 		return
 	}
-	
+
 	// Process and print the input with the specified color and substring
 	output := a.ProcessInput(contents, input, color, subString)
-
 
 	if *flgOutput != "" {
 
