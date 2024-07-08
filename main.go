@@ -44,19 +44,31 @@ func main() {
 		fmt.Println("Error: the file must be a .txt file")
 		os.Exit(0)
 	}
-	// if !strings.Contains(os.Args[1], "--output=") && flag.NFlag() == 1 {
-	// 	fmt.Println(outError)
-	// 	os.Exit(0)
-	// }
+	// Assuming flag.NFlag() correctly counts the number of flags set by the user
+	nflags := flag.NFlag()
+
+	if nflags == 1 {
+		if !strings.Contains(os.Args[1], "--output=") && !strings.Contains(os.Args[1], "--color=") {
+			switch nflags {
+			case 1:
+				fmt.Println(outError)
+			case 2:
+				fmt.Println(ErrorText)
+			default:
+				fmt.Println("Only two flags allowed")
+			}
+			os.Exit(0)
+		}
+	}
+
 	color := a.ColorPicker(*flgColor)
 
 	// Get non-flag arguments
-	args := flag.Args()    // Non-flag arguments
-	nArgs := len(args)     // Count of non-flag arguments
-	nflags := flag.NFlag() // Count of flags
+	args := flag.Args() // Non-flag arguments
+	nArgs := len(args)  // Count of non-flag arguments
 
 	// Handle arguments based on the number of flags and non-flag arguments
-	if nflags == 1 {
+	if nflags >= 1 {
 		switch nArgs {
 		case 1:
 			input = args[0]
@@ -71,15 +83,15 @@ func main() {
 			bannerFile = args[2]
 		default:
 			fmt.Println(ErrorText)
-			os.Exit(0)		
+			os.Exit(0)
 
 		}
-	}else{
+	} else {
 		switch nArgs {
 		case 1:
 			input = args[0]
 		case 2:
-			input = args[0]	
+			input = args[0]
 			bannerFile = args[1]
 		default:
 			fmt.Println(fsError)

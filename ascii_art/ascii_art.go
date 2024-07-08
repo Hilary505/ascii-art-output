@@ -39,6 +39,7 @@ func ColorPicker(color string) (colorCode string) {
 		return ""
 	}
 
+	
 	colorChat := map[string]string{
 		"reset":          "\u001b[39m",
 		"black":          "\u001b[30m",
